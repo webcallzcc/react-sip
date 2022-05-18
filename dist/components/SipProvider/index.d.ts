@@ -1,0 +1,187 @@
+import * as PropTypes from "prop-types";
+import * as React from "react";
+import { CallDirection, CallStatus, SipErrorType, SipStatus } from "../../lib/enums";
+import { ExtraHeaders, IceServers, MuteStatus, ListCallLog } from "../../lib/types";
+export default class SipProvider extends React.Component<{
+    host: string;
+    socket: string;
+    user: string;
+    auth: string;
+    password: string;
+    autoRegister: boolean;
+    autoAnswer: boolean;
+    iceRestart: boolean;
+    noPassword: boolean;
+    sessionTimersExpires: number;
+    extraHeaders: ExtraHeaders;
+    iceServers: IceServers;
+    streamLocalId: string;
+    streamRemoteId: string;
+    onNotify: Function;
+    onRegister: Function;
+    onRegisterFailed: Function;
+    debug: boolean;
+}, {
+    sipStatus: SipStatus;
+    sipErrorType: SipErrorType | null;
+    sipErrorMessage: string | null;
+    callStatus: CallStatus;
+    callDirection: CallDirection | null;
+    callCounterpart: string | null;
+    calllogs: ListCallLog | null;
+    calltype: string | null;
+    localHold: boolean;
+    remoteHold: boolean;
+    muteStatus: MuteStatus;
+    rtcSession: any;
+}> {
+    static childContextTypes: {
+        sip: PropTypes.Requireable<PropTypes.InferProps<{
+            status: PropTypes.Requireable<string>;
+            errorType: PropTypes.Requireable<string>;
+            errorMessage: PropTypes.Requireable<string>;
+            host: PropTypes.Requireable<string>;
+            port: PropTypes.Requireable<number>;
+            user: PropTypes.Requireable<string>;
+            password: PropTypes.Requireable<string>;
+            autoRegister: PropTypes.Requireable<boolean>;
+            autoAnswer: PropTypes.Requireable<boolean>;
+            sessionTimersExpires: PropTypes.Requireable<number>;
+            extraHeaders: PropTypes.Requireable<{
+                [x: string]: (string | null)[] | null;
+            }>;
+            iceServers: PropTypes.Requireable<(object | null)[]>;
+            debug: PropTypes.Requireable<boolean>;
+        }>>;
+        call: PropTypes.Requireable<PropTypes.InferProps<{
+            id: PropTypes.Requireable<string>;
+            status: PropTypes.Requireable<string>;
+            direction: PropTypes.Requireable<string>;
+            counterpart: PropTypes.Requireable<string>;
+        }>>;
+        muteStatus: PropTypes.Requireable<PropTypes.InferProps<{
+            audio: PropTypes.Requireable<boolean>;
+            video: PropTypes.Requireable<boolean>;
+        }>>;
+        registerSip: PropTypes.Requireable<(...args: any[]) => any>;
+        unregisterSip: PropTypes.Requireable<(...args: any[]) => any>;
+        answerCall: PropTypes.Requireable<(...args: any[]) => any>;
+        startCall: PropTypes.Requireable<(...args: any[]) => any>;
+        stopCall: PropTypes.Requireable<(...args: any[]) => any>;
+    };
+    static propTypes: {
+        host: PropTypes.Requireable<string>;
+        socket: PropTypes.Requireable<string>;
+        user: PropTypes.Requireable<string>;
+        auth: PropTypes.Requireable<string>;
+        password: PropTypes.Requireable<string>;
+        autoRegister: PropTypes.Requireable<boolean>;
+        autoAnswer: PropTypes.Requireable<boolean>;
+        iceRestart: PropTypes.Requireable<boolean>;
+        noPassword: PropTypes.Requireable<boolean>;
+        sessionTimersExpires: PropTypes.Requireable<number>;
+        extraHeaders: PropTypes.Requireable<{
+            [x: string]: (string | null)[] | null;
+        }>;
+        iceServers: PropTypes.Requireable<(object | null)[]>;
+        streamLocalId: PropTypes.Requireable<string>;
+        streamRemoteId: PropTypes.Requireable<string>;
+        onNotify: PropTypes.Requireable<(...args: any[]) => any>;
+        onRegister: PropTypes.Requireable<(...args: any[]) => any>;
+        onRegisterFailed: PropTypes.Requireable<(...args: any[]) => any>;
+        debug: PropTypes.Requireable<boolean>;
+        children: PropTypes.Requireable<PropTypes.ReactNodeLike>;
+    };
+    static defaultProps: {
+        host: null;
+        socket: string;
+        user: null;
+        auth: null;
+        password: null;
+        autoRegister: boolean;
+        autoAnswer: boolean;
+        iceRestart: boolean;
+        noPassword: boolean;
+        sessionTimersExpires: number;
+        extraHeaders: {
+            register: never[];
+            invite: never[];
+        };
+        iceServers: never[];
+        streamLocalId: string;
+        streamRemoteId: string;
+        onNotify: null;
+        onRegister: null;
+        onRegisterFailed: null;
+        debug: boolean;
+        children: null;
+    };
+    private ua;
+    private remoteAudio;
+    private localAudio;
+    private remoteStream;
+    private logger;
+    constructor(props: any);
+    changeMuteAudio(mute: any): void;
+    changeMuteVideo(mute: any): void;
+    changeHold(hold: any): void;
+    sendDTMF(dtmf: any): void;
+    getChildContext(): {
+        sip: {
+            status: SipStatus;
+            errorType: "sipErrorType/CONFIGURATION" | "sipErrorType/CONNECTION" | "sipErrorType/REGISTRATION" | null;
+            errorMessage: string | null;
+            children?: React.ReactNode;
+            host: string;
+            socket: string;
+            user: string;
+            auth: string;
+            password: string;
+            autoRegister: boolean;
+            autoAnswer: boolean;
+            iceRestart: boolean;
+            noPassword: boolean;
+            sessionTimersExpires: number;
+            extraHeaders: ExtraHeaders;
+            iceServers: {
+                urls: string | string[];
+                username?: string | undefined;
+                credential?: string | undefined;
+                credentialType?: string | undefined;
+                password?: string | undefined;
+            }[];
+            streamLocalId: string;
+            streamRemoteId: string;
+            onNotify: Function;
+            onRegister: Function;
+            onRegisterFailed: Function;
+            debug: boolean;
+        };
+        call: {
+            id: string;
+            status: CallStatus;
+            direction: "callDirection/INCOMING" | "callDirection/OUTGOING" | null;
+            counterpart: string | null;
+            calltype: string | null;
+        };
+        registerSip: () => any;
+        unregisterSip: () => any;
+        answerCall: () => void;
+        startCall: (destination: any, hasVideo?: boolean) => void;
+        stopCall: () => void;
+    };
+    componentDidMount(): void;
+    componentDidUpdate(prevProps: any): void;
+    componentWillUnmount(): void;
+    registerSip: () => any;
+    unregisterSip: () => any;
+    answerCall: () => void;
+    startCall: (destination: any, hasVideo?: boolean) => void;
+    stopCall: () => void;
+    reconfigureDebug(): void;
+    reinitializeJsSIP(): void;
+    updateCallLog(): void;
+    removeCallLog(id: any): void;
+    logCall: (session: any, status: any) => void;
+    render(): React.ReactChild[];
+}
