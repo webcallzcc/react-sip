@@ -63,3 +63,25 @@ export const callPropType = PropTypes.shape({
   direction: PropTypes.string,
   counterpart: PropTypes.string,
 });
+
+export interface MuteStatus {
+  audio: boolean;
+  video: boolean;
+}
+
+export const muteStatusPropType = PropTypes.shape({
+  audio: PropTypes.bool,
+  video: PropTypes.bool,
+});
+
+export interface CallLog {
+  id: string;
+  clid: string;
+  uri: string;
+  start: number;
+  stop: number;
+  flow: string;
+  status: string;
+}
+
+export type ListCallLog = Array<CallLog>;

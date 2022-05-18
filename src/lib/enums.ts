@@ -19,11 +19,13 @@ export type SipErrorType =
   | "sipErrorType/REGISTRATION";
 
 export const CALL_STATUS_IDLE = "callStatus/IDLE";
+export const CALL_STATUS_STARTCALL = "callStatus/STARTCALL";
 export const CALL_STATUS_STARTING = "callStatus/STARTING";
 export const CALL_STATUS_ACTIVE = "callStatus/ACTIVE";
 export const CALL_STATUS_STOPPING = "callStatus/STOPPING";
 export type CallStatus =
   | "callStatus/IDLE"
+  | "callStatus/STARTCALL"
   | "callStatus/STARTING"
   | "callStatus/ACTIVE"
   | "callStatus/STOPPING";
